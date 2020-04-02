@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.IO;
+using System.Web.Security;
 
 namespace DuckSurveyProjectDotNet
 {
@@ -10,7 +11,7 @@ namespace DuckSurveyProjectDotNet
     public partial class SurveyForm : System.Web.UI.Page
     {
 
-        public string GetConnectionString()
+        public static string GetConnectionString()
         {
             //we will set up the configuration which will call our 
             //web.config file to provide the database details because 
@@ -89,7 +90,22 @@ namespace DuckSurveyProjectDotNet
 
         protected void Page_Load(object sender, EventArgs e)
         {
-          
+            if (Login.userName == "Admin")
+            {
+                genReport.Visible = true;
+            }
+            if (!IsPostBack)
+            {
+                if (Session["LoginId"] == null)
+                    Response.Redirect("Login.aspx");
+                else
+                {
+                    Response.ClearHeaders();
+                    Response.AddHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+                    Response.AddHeader("Pragma", "no-cache");
+                }
+
+            }
         }
         protected void submit_Click(object sender, EventArgs e)
         {
@@ -104,6 +120,26 @@ namespace DuckSurveyProjectDotNet
                 confirm.Visible = true;
             }
         }
+        protected void logout_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Session.Abandon();
+                Session["LoginId"] = null;
+                Response.Cache.SetCacheability(System.Web.HttpCacheability.NoCache);
+                Response.Buffer = true;
+                Response.ExpiresAbsolute = DateTime.Now.AddDays(-1d);
+                Response.Expires = -1000;
+                Response.CacheControl = "no-cache";
+                Response.Redirect("~/Login.aspx", true);
+            }
+            catch (Exception ex)
+            {
+                Response.Write(ex.Message);
+            }
+            
+        }
+
 
         protected void generateReport_Click(object sender, EventArgs e)
         {
@@ -138,7 +174,7 @@ namespace DuckSurveyProjectDotNet
             string selectedValue = foodTime.SelectedItem.Value;
 
             //--- Show results in page.
-            Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
+            //Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
         }
         protected void foodName_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -146,7 +182,7 @@ namespace DuckSurveyProjectDotNet
             string selectedValue = foodName.SelectedItem.Value;
 
             //--- Show results in page.
-            Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
+            //Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
         }
 
         protected void foodLoc_SelectedIndexChanged(object sender, EventArgs e)
@@ -155,7 +191,7 @@ namespace DuckSurveyProjectDotNet
             string selectedValue = foodLoc.SelectedItem.Value;
 
             //--- Show results in page.
-            Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
+            //Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
         }
 
         protected void ducksNumber_SelectedIndexChanged(object sender, EventArgs e)
@@ -164,7 +200,7 @@ namespace DuckSurveyProjectDotNet
             string selectedValue = ducksNumber.SelectedItem.Value;
 
             //--- Show results in page.
-            Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
+            //Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
         }
         protected void foodType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -172,7 +208,7 @@ namespace DuckSurveyProjectDotNet
             string selectedValue = foodType.SelectedItem.Value;
 
             //--- Show results in page.
-            Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
+            //Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
         }
         protected void foodQty_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -180,7 +216,7 @@ namespace DuckSurveyProjectDotNet
             string selectedValue = foodQty.SelectedItem.Value;
 
             //--- Show results in page.
-            Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
+            //Response.Write("Selected Text is " + selectedText + " and selected value is :" + selectedValue);
         }
 
 

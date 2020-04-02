@@ -19,7 +19,7 @@
     <form id="form1" runat="server">
         <div>
             <div>
-                <strong><span style="font-size: 14pt; color: #0000ff">Get to know your ducks!</span></strong><br />
+                <strong><span style="font-size: 24pt; color: #0000ff">Get to know your ducks!</span></strong><br />
                 <br />
                 <table>
                     <tr>
@@ -120,9 +120,18 @@
                         <td class="auto-style1"></td>
                         <td style="width: 63px; text-align: center"></td>
                         <td style="width: 193px">
-                            <asp:Button ID="genReport" runat="server" Text="Generate Report" OnClick="generateReport_Click" /></td>
+                            <asp:Button ID="genReport" runat="server" Text="Generate Report" OnClick="generateReport_Click" Visible="false"/></td>
                     </tr>
+                    <br />
+                    <br />
+                    <tr>
+                    <td class="auto-style1"></td>
+                    <td style="width: 63px; text-align: center"></td>
+                    <td style="width: 193px">
+                        <asp:Button ID="logout" runat="server" Text="Logout" OnClick="logout_Click" /></td>
+                </tr>
                 </table>
+                <br />
             </div>
             <br />
 
